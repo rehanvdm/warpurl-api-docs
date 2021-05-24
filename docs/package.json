@@ -1,0 +1,20 @@
+{
+  "name": "warpurlapi-docs",
+  "version": "0.0.1",
+  "description": "WarpURL API Documentation",
+  "main": "index.js",
+  "authors": {
+    "name": "Rehan",
+    "email": "rehan.vdm4@gmail.com"
+  },
+  "repository": "/WarpURL API Docs",
+  "scripts": {
+    "dev-reload-for-config-changes": "vuepress dev src --temp src/.temp",
+    "dev": "vuepress dev src",
+    "build": "vuepress build src"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "vuepress": "^1.5.3"
+  }
+}
