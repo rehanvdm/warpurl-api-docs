@@ -35,6 +35,27 @@ module.exports = {
       }
     ],
     sidebar: {
+      '/api/': [
+        {
+          title: 'Api',
+          collapsable: false,
+          children: [
+            '',
+            'model',
+            {
+              title: 'REQUESTS',
+              // prefix: '/requests/', //not really working
+              // path: '/api/requests/', //no path makes it a group
+              collapsable: false,
+              sidebarDepth: 1,
+              children: [
+                'link'
+              ]
+            },
+          ]
+        }
+      ],
+
       '/guide/': [
         {
           title: 'Guide',
