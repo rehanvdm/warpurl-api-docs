@@ -153,17 +153,48 @@ General information of the field will be indicated if of significant value.
     "clicks": 44685,
     "clicks_day": 7560,
     "clicks_month": 44685,
+    "clicks_unique": 1,
     "created_at": "2021-05-19 19:33:03.324"
 }
 ```
-- `short_url` Only the slug, must not be prepended by the shortening URL
-- `long_url` Must start with http:// or https://
-- `enable` *Reserved fo future use*
+- `short_url` Only the slug, must NOT be prepended by the shortening domain. Must start with "/". 
+  Can not contain `?` or `#`. Max length 255 characters.
+- `name` Max length 100 characters.
+- `long_url` Must start with "http://" or "https://". Max length 1024 charters.
+- `enable` *Reserved fo future use*.
 - `hidden` Hidden links do not show on the Subscription Portal
-- `client_id` This value can be acquired by inspecting the JWT claims of the user or doing the Find User api call. *Reserved fo future use*
-- `clicks` Total clicks for the lifespan of the link
+- `client_id` This value can be acquired by inspecting the JWT claims of the user or doing the Find User api call. *Reserved fo future use*.
+- `clicks` Total clicks for the lifespan of the link.
+- `clicks_unique` Total unique clicks for the lifespan of the link. 
+    Uniqueness counted by the querystring attached to the short url when navigated by user. 
 - `clicks_day` Total clicks this link did in the current day, timezone UTC. 
 - `clicks_month` Total clicks this link did in the current month, timezone UTC. 
+
+----
+
+### Link History Hourly
+```
+{
+    "for": "hourly",
+    "link_id": "#lnk#/anything",
+    "client_id": "#clt#6be8d279-591a-4210-922e-d6caa605b063",
+    "user_id": "#usr#SuperAdmin1",
+    "period": "2021-05-19",
+    "views": {
+      19: 2578,
+      20: 33159,
+      21: 8648,
+      22: 8640
+    },
+    "last_updated_at": "2021-05-19 19:33:03.324"
+}
+```
+- `for` Will always be `hourly`
+- `client_id` This value can be acquired by inspecting the JWT claims of the user or doing the Find User api call. *Reserved fo future use*.
+- `period` The period specifying the day the hourly clicks in views are for, format `YYYY-MM-DD` (UTC).
+- `views` An object with the key being the hour and the value the count for that hour. Keys/hours range from 0 to 23.
+  Uniqueness counted by the querystring attached to the short url when navigated by user.
+- `last_updated_at` Last time the link was clicked/record object was updated.
 
 
 ----
@@ -184,9 +215,8 @@ General information of the field will be indicated if of significant value.
 > 1. *[Paginate Campaign Stats](#get)*
 > 1. *[Find Batch](#get)*
 > 1. *[Find Batch History](#get)*
-> 1. *[Find History for User](#get)*
+> 1. *[Find User History](#get)*
 > 1. *[Delete](#get)*
-
 
 ### Link - Get suggested name
 
@@ -213,7 +243,7 @@ This API just follows the `long_url` and retrieves the title tag from the head o
 ##### SUCCESS
 ```json
 {
-  "control": { "ResponseCode": 2000, "Build": "0" },
+  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
   "data": "New – Amazon DynamoDB Transactions | AWS News Blog"
 }
 ```
@@ -228,42 +258,677 @@ This API just follows the `long_url` and retrieves the title tag from the head o
 Create a Short URL from a Long URL.
 
 #### REQUEST
+
 ##### HEADERS:
 ```json
 "x-api-key": <API KEY>,
 "Authorization": <JWT ID Token>
 ```
 ##### BODY:
-##### 1) Auto Generate Slug
+
 ```json
 {
     "control": { },
     "data": {
       "client_id": "#clt#6be8d279-591a-4210-922e-d6caa605b063",
-      "username": "",
+      "username": "SuperAdmin1",
       "name": "Test link type",
-      "long_url": "https://aws.amazon.com/blogs/aws/new-amazon-dynamodb-transactions/"
+      "long_url": "https://aws.amazon.com/blogs/aws/new-amazon-dynamodb-transactions/",
+      "short_url": "/anything",
+      "tags": ["News Letter", "Blog"],
+      "campaign_id": "#cmp#2021-01-28 18:53:19.214#970a6ed7-90fd-42d9-81a4-62ad838e85bd",
+      "campaign_channel": "Email"
     }
 }
 ```
 
-TODO: Continue others
+- `client_id`, `username`, `long_url` Required.
+- `name` Optional, if left empty will default to the `long_url`.
+- `short_url` Optional, if left empty will default to a unique 6 value combination consisting of this alphabet:
+  "123456789abcdfghijkmnpqrstvwxyzABCDFGHJKLMNPQRSTVWXYZ".
+- `tags` Optional, array of string values, maximum 5. The values are not validated against the Account set available tags. 
+- `campaign_id` Optional, the ID of the campaign you want to associate this link to. Must be specified if `campaign_channel` is specified.
+- `campaign_channel` Optional, if Campaign does not have the Channel, it will be added to the Campaign.
+
 
 #### RESPONSE:
 
 #### SUCCESS
 ```json
 {
-  "control": { "ResponseCode": 2000, "Build": "0" },
-  "data": "New – Amazon DynamoDB Transactions | AWS News Blog"
+  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
+  "data": <model:link>
 }
 ```
-- `data` Is null if the link took longer than 10 seconds to resolve.
 
+> *[Back to all Requests](#requests)*
+---------------
+
+### Link - Update
+
+Update, **replaces properties** of an existing link.
+
+All the same fields and logic applied to the creation of the link applies for the update. 
+Except that you can not change the `short_url` and `username` fields. The `link_id` obtained from the create
+is used as the identifier for the update.
+
+Tags are updated with a separate API call.
+
+All **optional properties** when creating a link **can be removed by not specifying that property or making them null**.
+
+::: danger 
+Changing `long_url` uses an invalidation which is a billing metric, only do so if absolutely necessary.
+:::
+
+#### REQUEST
+
+##### HEADERS:
+```json
+"x-api-key": <API KEY>,
+"Authorization": <JWT ID Token>
+```
+##### BODY:
+
+```json
+{
+    "control": { },
+    "data": {
+      "link_id": "#lnk#/anything",
+      "name": "Test link type",
+      "long_url": "https://aws.amazon.com/blogs/aws/new-amazon-dynamodb-transactions/",
+      "campaign_id": "#cmp#2021-01-28 18:53:19.214#970a6ed7-90fd-42d9-81a4-62ad838e85bd",
+      "campaign_channel": "Email"
+    }
+}
+```
+
+#### RESPONSE:
+
+#### SUCCESS
+```json
+{
+  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
+  "data": <model:link>
+}
+```
+
+> *[Back to all Requests](#requests)*
+---------------
+
+### Link - Update Tags
+
+Update, **replaces**, the tags of an existing link.
+
+- Maximum 5 tags per link.
+- Tags can not be longer than 20 charters.
+- Leave array empty, omit property or set to null to remove all tags.
+
+#### REQUEST
+
+##### HEADERS:
+```json
+"x-api-key": <API KEY>,
+"Authorization": <JWT ID Token>
+```
+##### BODY:
+
+```json
+{
+    "control": { },
+    "data": {
+      "link_id": "#lnk#/anything",
+      "client_id": "#clt#6be8d279-591a-4210-922e-d6caa605b063",
+      "tags": ["Tag1"]      
+    }
+}
+```
+
+#### RESPONSE:
+
+#### SUCCESS
+```json
+{
+  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
+  "data": <model:link>
+}
+```
+
+> *[Back to all Requests](#requests)*
+---------------
+
+### Link - Update Hidden
+
+Updates the `hidden` property of a link(s).
+
+- Maximum of 10 values can be specified in `link_ids`.
+
+#### REQUEST
+
+##### HEADERS:
+```json
+"x-api-key": <API KEY>,
+"Authorization": <JWT ID Token>
+```
+##### BODY:
+
+```json
+{
+    "control": { },
+    "data": {
+      "link_ids": ["#lnk#/anything"],
+      "client_id": "#clt#6be8d279-591a-4210-922e-d6caa605b063",
+      "hidden": true    
+    }
+}
+```
+
+- `hidden` Absolute `true` or `false` value
+
+#### RESPONSE:
+
+#### SUCCESS
+```json
+{
+  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
+  "data": {
+    "link_ids": ["#lnk#/anything"],
+    "client_id": "#clt#6be8d279-591a-4210-922e-d6caa605b063",
+    "hidden": true
+  }
+}
+```
+
+> *[Back to all Requests](#requests)*
+---------------
+
+### Link - Invalidate
+
+Update the `long_url` in the cache. This is only required in extreme edge cases as an implicit invalidation is done in the 
+Link Update IF the `long_url` changed. 
+
+::: danger
+An invalidation is a billing metric, only do so if absolutely necessary.
+:::
+
+Eventual consistency is at play so wait between 10 seconds to a few minutes for the value to propagate the network.
+
+- Maximum of 10 values can be specified in `link_ids`.
+
+#### REQUEST
+
+##### HEADERS:
+```json
+"x-api-key": <API KEY>,
+"Authorization": <JWT ID Token>
+```
+##### BODY:
+
+```json
+{
+    "control": { },
+    "data": {
+      "link_ids": ["#lnk#/anything"],
+      "client_id": "#clt#6be8d279-591a-4210-922e-d6caa605b063",
+      "hidden": true    
+    }
+}
+```
+
+- `hidden` Absolute `true` or `false` value
+
+#### RESPONSE:
+
+#### SUCCESS
+```json
+{
+  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
+  "data": true
+}
+```
+
+> *[Back to all Requests](#requests)*
+---------------
+
+### Link - Find
+
+Find an existing link and optionally all of its tags.
+
+**Tags can be retrieved** with the link if `Include: ["tags"]` is specified in the `control` property, otherwise
+do not specify if not required.
+
+#### REQUEST
+
+##### HEADERS:
+```json
+"x-api-key": <API KEY>,
+"Authorization": <JWT ID Token>
+```
+##### BODY:
+
+```json
+{
+    "control": { "Include": ["tags"] },
+    "data": {
+      "link_id": "#lnk#/anything"
+    }
+}
+```
+
+#### RESPONSE:
+
+#### SUCCESS
+```json
+{
+  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
+  "data": {
+    "link": <model:link>,
+    "tags": ["Tag1"]
+  }
+}
+```
+
+- `tags` Will only be returned if specified to do so in the `control` property of the request. 
 
 > *[Back to all Requests](#requests)*
 ---------------
 
 
+### Link - Find Tags
 
+Find the tags of an existing link.
 
+Take note, the response is not the same as the plain tag string values used previously, the are enriched with extra information.
+
+#### REQUEST
+
+##### HEADERS:
+```json
+"x-api-key": <API KEY>,
+"Authorization": <JWT ID Token>
+```
+##### BODY:
+
+```json
+{
+    "control": { },
+    "data": {
+      "link_id": "#lnk#/anything",
+      "client_id": "#clt#6be8d279-591a-4210-922e-d6caa605b063"
+    }
+}
+```
+
+#### RESPONSE:
+
+#### SUCCESS
+```json
+{
+  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
+  "data": {
+    "Items": [
+      {
+        "tag_id": "#tag#clt#6be8d279-591a-4210-922e-d6caa605b063#Tag1",
+        "link_id": "#lnk#/anything",
+        "tag_name": "Tag1"
+      },
+      ...
+    ]
+  }
+}
+```
+
+> *[Back to all Requests](#requests)*
+---------------
+
+### Link - Paginate
+
+Paginate the links of a user.
+
+Take note `Limit` and `PageKey` is capitalized, like all logical (non-field) properties. 
+Pagination is seek based and ordered by creation date in descending order. 
+
+- `Limit` Maximum amount of rows to return, must be less than 100, *might return less than specified value.
+- `PageKey` Used to continue the pagination. If the first page call returned a `PageKey` in the response indicating there are more items, then by specifying
+  it in the next request continues getting the data from that point. Leave empty string, null or omit the PageKey on the 
+  first request to not use it. 
+
+#### REQUEST
+
+##### HEADERS:
+```json
+"x-api-key": <API KEY>,
+"Authorization": <JWT ID Token>
+```
+##### BODY:
+
+```json
+{
+    "control": { },
+    "data": {
+      "username": "SuperAdmin1",
+      "Limit": 10,
+      "PageKey": null
+    }
+}
+```
+
+#### RESPONSE:
+
+#### SUCCESS
+```json
+{
+  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
+  "data": {
+    "Items": [<model:link>],
+    "PageKey": null
+  }
+}
+```
+
+- `PageKey` Will only have a value IF there are more items to be retrieved, otherwise null.
+
+> *[Back to all Requests](#requests)*
+---------------
+
+### Link - Paginate Popular
+
+Paginate the links of a user by popularity.
+
+Take note `Limit`, `PageKey`, `Period` and `Sort` is capitalized, like all logical (non-field) properties.
+
+- `Limit` Maximum amount of rows to return, must be less than 100, *might return less than specified value.
+- `PageKey` Used to continue the pagination. If the first page call returned a `PageKey` in the response indicating there are more items, then by specifying
+  it in the next request continues getting the data from that point. Leave empty string, null or omit the PageKey on the
+  first request to not use it.
+- `Period` Can be one of three values:
+  - `alltime` Orders by most popular over all links 
+  - `monthly` Orders by most popular for the month (UTC)
+  - `daily` Orders by most popular for the current day (UTC)
+- `Sort` Value can be one of:
+  - `ASC` Sorts from the lowest count to highest. 
+  - `DESC` Default if property is omitted. Sorts from the highest count to  lowest. 
+
+#### REQUEST
+
+##### HEADERS:
+```json
+"x-api-key": <API KEY>,
+"Authorization": <JWT ID Token>
+```
+##### BODY:
+
+```json
+{
+    "control": { },
+    "data": {
+      "username": "SuperAdmin1",
+      "Limit": 10,
+      "PageKey": null,
+      "Period": "daily",
+      "Sort": "DESC"
+    }
+}
+```
+
+#### RESPONSE:
+
+#### SUCCESS
+```json
+{
+  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
+  "data": {
+    "Items": [<model:link>],
+    "PageKey": null
+  }
+}
+```
+
+- `PageKey` Will only have a value IF there are more items to be retrieved, otherwise null.
+
+> *[Back to all Requests](#requests)*
+---------------
+
+### Link - Paginate Campaign Stats
+
+Paginate and count the stats for the campaign links server side.
+
+Take note `PageKey` is capitalized, like all logical (non-field) properties. 
+
+- `PageKey` Used to continue the pagination. If the first page call returned a `PageKey` in the response indicating there are more items, then by specifying
+  it in the next request continues getting the data from that point. Leave empty string, null or omit the PageKey on the
+  first request to not use it.
+
+#### REQUEST
+
+##### HEADERS:
+```json
+"x-api-key": <API KEY>,
+"Authorization": <JWT ID Token>
+```
+##### BODY:
+
+```json
+{
+    "control": { },
+    "data": {
+      "campaign_id": "#cmp#2021-01-28 18:53:19.214#970a6ed7-90fd-42d9-81a4-62ad838e85bd",
+      "PageKey": null
+    }
+}
+```
+
+#### RESPONSE:
+
+#### SUCCESS
+```json
+{
+  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
+  "data": {
+    "Stat": {
+      "links": 0,
+      "clicks": 0,
+      "clicks_month": 0,
+      "clicks_day": 0,
+      "clicks_unique": 0
+    },
+    "PageKey": null
+  }
+}
+```
+
+- `PageKey` Will only have a value IF there are more links that needs to be counted server side, otherwise null.
+- `Stat` This object contains statistic fields similar to what have on the `<model:link>`. With the extra property
+  of `links` indicating the count of links that has been used for the calculation. 
+
+> *[Back to all Requests](#requests)*
+---------------
+
+### Link - Find Batch
+
+Find links in batches of maximum 25.  Similar than *Link - Find* except that it is done in batches.
+
+#### REQUEST
+
+##### HEADERS:
+```json
+"x-api-key": <API KEY>,
+"Authorization": <JWT ID Token>
+```
+##### BODY:
+
+```json
+{
+    "control": { },
+    "data": {
+      "client_id": "#clt#6be8d279-591a-4210-922e-d6caa605b063",
+      "link_ids": ["#lnk#/anything"]
+    }
+}
+```
+
+#### RESPONSE:
+
+#### SUCCESS
+```json
+{
+  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
+  "data": {
+    "Items": [<model:link>],
+    "PageKey": null
+  }
+}
+```
+
+- `PageKey` Always null, not used.
+
+> *[Back to all Requests](#requests)*
+---------------
+
+### Link - Find Batch History
+
+Find the history of links in batches of maximum 25.
+
+- `period` Can be one of two values:
+  - `hourly` Indicates to retrieve all the hourly values for the given `period_value` specified in days
+  - `daily` Indicates to retrieve all the daily values for the given `period_value` specified in months
+- `period_value` 
+  - IF `period` is `hourly` then this should be formatted as `YYYY-MM-DD`
+  - IF `period` is `daily` then this should be formatted as `YYYY-MM`
+  
+#### REQUEST
+
+##### HEADERS:
+```json
+"x-api-key": <API KEY>,
+"Authorization": <JWT ID Token>
+```
+##### BODY:
+
+```json
+{
+    "control": { },
+    "data": {
+      "client_id": "#clt#6be8d279-591a-4210-922e-d6caa605b063",
+      "link_ids": ["#lnk#/anything"],
+      "period": "daily",
+      "period_value": "2021-06"
+    }
+}
+```
+
+#### RESPONSE:
+
+#### SUCCESS
+```json
+{
+  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
+  "data": {
+    "Items": [<model:link>],
+    "PageKey": null
+  }
+}
+```
+
+- `PageKey` Always null, not used.
+
+> *[Back to all Requests](#requests)*
+---------------
+
+### Link - Find User History
+
+Finds the history for all the links of a user.
+
+- `period_values`
+  - An array of values, maximum 13.
+  - Formatted as `YYYY-MM`
+
+#### REQUEST
+
+##### HEADERS:
+```json
+"x-api-key": <API KEY>,
+"Authorization": <JWT ID Token>
+```
+##### BODY:
+
+```json
+{
+    "control": { },
+    "data": {
+      "client_id": "#clt#6be8d279-591a-4210-922e-d6caa605b063",
+      "username": "SuperAdmin1",
+      "period_value": ["2021-04", "2021-05"]
+    }
+}
+```
+
+#### RESPONSE:
+
+#### SUCCESS
+```json
+{
+  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
+  "data": {
+    "Items": [<model:link_history_daily>],
+    "PageKey": null
+  }
+}
+```
+Same format as <model:link_history_daily>.
+
+- `PageKey` Always null, not used.
+- `Items[x].link_id` Will always be null
+- `Items[x].for` Will always be `daily`
+
+> *[Back to all Requests](#requests)*
+---------------
+
+### Link - Delete
+
+Delete links in batches of maximum 10.
+
+- `invalidate` Whether to also clear them out of the edge caches immediately. Can be either true or false. 
+  If false is specified then the link will be removed and inaccessible within a day.
+
+::: danger
+Specifying `invalidate` as true uses invalidations (same as count of links specified) which is a billing metric, 
+only do so if absolutely necessary. 
+:::
+
+#### REQUEST
+
+##### HEADERS:
+```json
+"x-api-key": <API KEY>,
+"Authorization": <JWT ID Token>
+```
+##### BODY:
+
+```json
+{
+    "control": { },
+    "data": {
+      "client_id": "#clt#6be8d279-591a-4210-922e-d6caa605b063",
+      "link_ids": ["#lnk#/anything"],
+      "invalidate": false
+    }
+}
+```
+
+#### RESPONSE:
+
+#### SUCCESS
+```json
+{
+  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
+  "data": {
+    "client_id": "#clt#6be8d279-591a-4210-922e-d6caa605b063",
+    "link_ids": ["#lnk#/anything"],
+    "invalidate": false
+  }
+}
+```
+Returns body as was sent on success.
+
+> *[Back to all Requests](#requests)*
+---------------
