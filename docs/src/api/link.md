@@ -1,17 +1,31 @@
 # Links
 
+All link requests (`/link/*`) need to specify the Auth headers below as described in [General](./#authentication)
+
+#### HEADERS
+```json
+"x-api-key": <API KEY>,
+"Authorization": <JWT ID Token>
+```
+
+----
+#### ALL REQUESTS
+
 [[toc]]
+
+
+
 
 ## Get suggested name 
 
 Follows the `long_url` and retrieve the title tag from the head of the link as the name.
 
 #### REQUEST
-#### Headers
-```json
-"x-api-key": <API KEY>,
-"Authorization": <JWT ID Token>
+#### Path
 ```
+/link/suggested_name
+```
+
 #### Body
 ```json
 {
@@ -42,12 +56,11 @@ Follows the `long_url` and retrieve the title tag from the head of the link as t
 Create a Short URL from a Long URL.
 
 #### REQUEST
-
-#### Headers
-```json
-"x-api-key": <API KEY>,
-"Authorization": <JWT ID Token>
+#### Path
 ```
+/link/create
+```
+
 #### Body
 
 ```json
@@ -106,11 +119,11 @@ Changing `long_url` uses an invalidation which is a billing metric, only do so i
 
 #### REQUEST
 
-#### Headers
-```json
-"x-api-key": <API KEY>,
-"Authorization": <JWT ID Token>
+#### Path
 ```
+/link/update
+```
+
 #### Body
 
 ```json
@@ -149,11 +162,11 @@ Updates, **replaces**, the tags of an existing link.
 
 #### REQUEST
 
-#### Headers
-```json
-"x-api-key": <API KEY>,
-"Authorization": <JWT ID Token>
+#### Path
 ```
+/link/update_tags
+```
+
 #### Body
 
 ```json
@@ -188,11 +201,11 @@ Updates the `hidden` property of a link(s).
 
 #### REQUEST
 
-#### Headers
-```json
-"x-api-key": <API KEY>,
-"Authorization": <JWT ID Token>
+#### Path
 ```
+/link/update_hidden
+```
+
 #### Body
 
 ```json
@@ -241,11 +254,11 @@ Wait between ten seconds to a few minutes for the invalidation to propagate the 
 
 #### REQUEST
 
-#### Headers
-```json
-"x-api-key": <API KEY>,
-"Authorization": <JWT ID Token>
+#### Path
 ```
+/link/invalidate
+```
+
 #### Body
 
 ```json
@@ -283,11 +296,11 @@ do not specify it if not required.
 
 #### REQUEST
 
-#### Headers
-```json
-"x-api-key": <API KEY>,
-"Authorization": <JWT ID Token>
+#### Path
 ```
+/link/find
+```
+
 #### Body
 
 ```json
@@ -326,11 +339,11 @@ The response is not the same as the plain tag string value used previously. They
 
 #### REQUEST
 
-#### Headers
-```json
-"x-api-key": <API KEY>,
-"Authorization": <JWT ID Token>
+#### Path
 ```
+/link/find_tags
+```
+
 #### Body
 
 ```json
@@ -378,11 +391,11 @@ Pagination is seek based and ordered by creation date in descending order.
 
 #### REQUEST
 
-#### Headers
-```json
-"x-api-key": <API KEY>,
-"Authorization": <JWT ID Token>
+#### Path
 ```
+/link/paginate_user
+```
+
 #### Body
 
 ```json
@@ -432,11 +445,11 @@ Paginate the links of a user by popularity.
 
 #### REQUEST
 
-#### Headers
-```json
-"x-api-key": <API KEY>,
-"Authorization": <JWT ID Token>
+#### Path
 ```
+/link/paginate_popular
+```
+
 #### Body
 
 ```json
@@ -480,11 +493,11 @@ Paginate and count the stats for the campaign links server side.
 
 #### REQUEST
 
-#### Headers
-```json
-"x-api-key": <API KEY>,
-"Authorization": <JWT ID Token>
+#### Path
 ```
+/link/paginate_campaign_stats
+```
+
 #### Body
 
 ```json
@@ -529,11 +542,11 @@ Find links in a batch of maximum 25.  Similar to *Find* except that it is done i
 
 #### REQUEST
 
-#### Headers
-```json
-"x-api-key": <API KEY>,
-"Authorization": <JWT ID Token>
+#### Path
 ```
+/link/find_batch
+```
+
 #### Body
 
 ```json
@@ -579,11 +592,11 @@ Find link history in batches of maximum 25.
   
 #### REQUEST
 
-#### Headers
-```json
-"x-api-key": <API KEY>,
-"Authorization": <JWT ID Token>
+#### Path
 ```
+/link/find_batch_history
+```
+
 #### Body
 
 ```json
@@ -626,11 +639,11 @@ Finds the history for all the links of a user.
 
 #### REQUEST
 
-#### Headers
-```json
-"x-api-key": <API KEY>,
-"Authorization": <JWT ID Token>
+#### Path
 ```
+/link/find_history_user
+```
+
 #### Body
 
 ```json
@@ -679,11 +692,11 @@ only do so if absolutely necessary.
 
 #### REQUEST
 
-#### Headers
-```json
-"x-api-key": <API KEY>,
-"Authorization": <JWT ID Token>
+#### Path
 ```
+/link/delete
+```
+
 #### Body
 
 ```json
