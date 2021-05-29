@@ -134,3 +134,83 @@ Daily views aggregated by month, all dates and times are in UTC.
 - `last_updated_at` Last time the link was clicked/record object was updated.
 
 ----
+
+## Campaign
+#### `<model:campaign>`
+
+A Campaign is just a grouping of links whereby a link can only have one campaign.
+
+```
+{
+    "campaign_id": "#cmp#2021-05-16 10:05:56.958#db6f265f-ac89-4004-8c69-bb7f9e8203ed",
+    "client_id": "#clt#6be8d279-591a-4210-922e-d6caa605b063",
+    "user_id": "#usr#SuperAdmin1",
+    "name": "News letter 2021-05",
+    "description": "May 2020 news letter",
+    "channels": ["Sms", "Email"],
+    "created_at": "2021-05-19 19:33:03.324"
+}
+```
+
+- `client_id`, `username`, `name` Required.
+- `name` Maximum length of 50 characters.
+- `description` Maximum length of 1024 characters.
+- `channels` Optional, array of strings. Not validated against Account set visible Campaign Channels.
+    Maximum 100 channels, with each having a maximum length of 25 characters.
+  
+----
+
+## Import
+#### `<model:db_import>`
+
+Data can be imported in bulk using CSV. An Import (DB Import) record indicates the status of the import job.
+
+There can only be one import active (in progress) at any point in time, if more are created, then they will be queued. 
+
+```
+{
+    "import_id": "#imp#87b3ba4e-a58d-4b27-b292-5867df9c24d6",
+    "import_type": "LINKS",
+    "import_format": "LINKS_1",
+    "import_status": "SUCCESSFUL",
+    "import_status_description": "Imported 100%",
+    "line_validation_ignore_error": true,
+    "file_name": "links-auto-slug-10k.csv",
+    "file_sie": "618965",
+    "client_id": "#clt#952be1ae-ca1f-401f-a9a2-6ab2b2116e57",
+    "user_id": "#usr#RehanDev1",
+    "processed_at": "2021-05-16 21:08:47.275",
+    "created_at": "2021-05-16 20:59:47.626",
+    "notes": "10k links auto slug",
+    "total_rows": 10000,
+    "total_error": 0,
+    "total_ignored": 0,
+    "total_success": 10000
+}
+```
+
+- `import_type` The type of record to import. Available values are:
+    - `LINKS`
+- `import_format` The format of the data, this is dependent on the `import_type`. Available values grouped by import type:
+    - `LINKS`:
+        - `LINKS_1` This is the standard WarpURL format that can be downloaded [here](https://warpurl.com/cdn/files/import_templates/links/warpurl.csv).
+- `import_status` The current status of the job, available values are:
+    - `QUEUED` Initial status after creating the record. This status will be retained untill processing actually starts,
+        where it will transition to  `PROCESSING`.
+    - `PROCESSING` Busy processing and importing the file.
+    - `SUCCESSFUL` Processing complete. Not an indication that all records were imported successfully.
+    - `ERROR_VALIDATION` Validation Error occurred that prematurely stopped the import process. 
+        Not an indication that all records were imported successfully.
+    - `ERROR_GENERAL`
+- `import_status_description` Text description of import status and percentage.
+- `line_validation_ignore_error` Reserved for future use. 
+- `file_name` The name of the file that was used.
+- `file_sie` The size of the file in bytes.
+- `notes` Optional, Any additional notes for this import. Maximum length 1024 characters.
+- `total_rows` Count of rows detected.
+- `total_error` Count of rows that could not be imported. Errors can be viewed by downloading the processed file.
+    Each row's error will be appended (last) as a new column on that row. 
+- `total_ignored` Count of rows that were ignored. Reserved for future use.
+- `total_success` Count of rows that were imported successfully.
+
+----

@@ -1,6 +1,6 @@
-# Campaigns
+# Imports
 
-All campaign requests (`/campaign/*`) need to specify the Auth headers below as described in [General](./#authentication)
+All imports requests (`/db_import/*`) need to specify the Auth headers below as described in [General](./#authentication)
 
 #### HEADERS
 ```json
@@ -16,7 +16,7 @@ All campaign requests (`/campaign/*`) need to specify the Auth headers below as 
 
 ## Create
 
-Create a Campaign to group links.
+Create an Import job.
 
 #### REQUEST
 #### Path
@@ -37,27 +37,76 @@ root, admin, user
     "data": {
       "client_id": "#clt#6be8d279-591a-4210-922e-d6caa605b063",
       "username": "SuperAdmin1",
-      "name": "News letter 2021-05",
-      "description": "May 2020 news letter",
-      "channels": ["Sms", "Email"]
+      "import_type": "LINKS",
+      "import_format": "LINKS_1",
+      "file_name": "test1.csv",
+      "notes": "This is for Jan 2021 news letter.. "
     }
 }
 ```
+See the [model](model.html#import) for a full field description/rules.
 
-- `client_id`, `username`, `name` Required.
+- `client_id`, `username`, `import_type`, `import_format`, `file_name` Required.
 
 #### RESPONSE
 
 #### Success
+
 ```json
 {
-  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
-  "data": <model:campaign>
+  "control": {
+    "ResponseCode": 2000,
+    "TraceID": "11648023-1376-4da8-806e-11999c1c519f",
+    "Build": "eb511f1"
+  },
+  "data": {
+    "DbImport": <model:db_import>,
+    "SignedPutUrl": ""
+  }
 }
 ```
 
-> *[Back to all Requests](#campaign)*
+> *[Back to all Requests](#import)*
 ---------------
+
+
+
+
+
+
+
+Continue explaining the SignedPutUrl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Update
 
@@ -100,11 +149,11 @@ root, admin, user
 ```json
 {
   "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
-  "data": <model:campaign>
+  "data": <model:db_import>
 }
 ```
 
-> *[Back to all Requests](#campaigns)*
+> *[Back to all Requests](#imports)*
 ---------------
 
 
@@ -142,11 +191,11 @@ root, admin, user
 ```json
 {
   "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
-  "data": <model:campaign>
+  "data": <model:db_import>
 }
 ```
 
-> *[Back to all Requests](#campaigns)*
+> *[Back to all Requests](#imports)*
 ---------------
 
 ## Paginate
@@ -192,7 +241,7 @@ root, admin, user
 {
   "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
   "data": {
-    "Items": [<model:campaign>],
+    "Items": [<model:db_import>],
     "PageKey": null
   }
 }
@@ -200,7 +249,7 @@ root, admin, user
 
 - `PageKey` Will only have a value IF there are more items to be retrieved, otherwise null.
 
-> *[Back to all Requests](#campaigns)*
+> *[Back to all Requests](#imports)*
 ---------------
 
 ## Search
@@ -247,7 +296,7 @@ root, admin, user
 {
   "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
   "data": {
-    "Items": [<model:campaign>],
+    "Items": [<model:db_import>],
     "PageKey": null
   }
 }
@@ -255,7 +304,7 @@ root, admin, user
 
 - `PageKey` Will only have a value IF there are more items to be retrieved, otherwise null.
 
-> *[Back to all Requests](#campaigns)*
+> *[Back to all Requests](#imports)*
 ---------------
 
 ## Delete
@@ -300,5 +349,5 @@ root, admin, user
 ```
 Returns body as was sent on success.
 
-> *[Back to all Requests](#campaigns)*
+> *[Back to all Requests](#imports)*
 ---------------

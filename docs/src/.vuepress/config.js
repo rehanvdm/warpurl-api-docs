@@ -50,7 +50,8 @@ module.exports = {
               sidebarDepth: 1,
               children: [
                   'link',
-                  'campaign'
+                  'campaign',
+                  'db_import'
               ]
             },
           ]

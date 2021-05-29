@@ -20,10 +20,16 @@ All link requests (`/link/*`) need to specify the Auth headers below as describe
 
 Follows the `long_url` and retrieve the title tag from the head of the link as the name.
 
+
 #### REQUEST
 #### Path
 ```
 /link/suggested_name
+```
+
+#### Authorization Required
+```
+root, admin, user
 ```
 
 #### Body
@@ -61,6 +67,11 @@ Create a Short URL from a Long URL.
 /link/create
 ```
 
+#### Authorization Required
+```
+root, admin, user
+```
+
 #### Body
 
 ```json
@@ -83,7 +94,7 @@ Create a Short URL from a Long URL.
 - `name` Optional, if left empty will default to the `long_url`.
 - `short_url` Optional, if left empty will default to a unique 6 value combination consisting of this alphabet:
   "123456789abcdfghijkmnpqrstvwxyzABCDFGHJKLMNPQRSTVWXYZ".
-- `tags` Optional, array of string values, maximum 5. The values are not validated against the Account set available tags. 
+- `tags` Optional, array of string values, maximum 5. The values are not validated against the Account set visible tags. 
 - `campaign_id` Optional, the ID of the campaign you want to associate this link to. Must be specified if `campaign_channel` is specified.
 - `campaign_channel` Optional, if specifying and the Campaign does not have the channel, then the channel will also be added to the Campaign if allowed.
 
@@ -122,6 +133,11 @@ Changing `long_url` uses an invalidation which is a billing metric, only do so i
 #### Path
 ```
 /link/update
+```
+
+#### Authorization Required
+```
+root, admin, user
 ```
 
 #### Body
@@ -167,6 +183,11 @@ Updates, **replaces**, the tags of an existing link.
 /link/update_tags
 ```
 
+#### Authorization Required
+```
+root, admin, user
+```
+
 #### Body
 
 ```json
@@ -204,6 +225,11 @@ Updates the `hidden` property of a link(s).
 #### Path
 ```
 /link/update_hidden
+```
+
+#### Authorization Required
+```
+root, admin, user
 ```
 
 #### Body
@@ -259,6 +285,11 @@ Wait between ten seconds to a few minutes for the invalidation to propagate the 
 /link/invalidate
 ```
 
+#### Authorization Required
+```
+root, admin, user
+```
+
 #### Body
 
 ```json
@@ -301,6 +332,11 @@ do not specify it if not required.
 /link/find
 ```
 
+#### Authorization Required
+```
+root, admin, user
+```
+
 #### Body
 
 ```json
@@ -340,6 +376,11 @@ Find the tags of an existing link.
 #### Path
 ```
 /link/find_tags
+```
+
+#### Authorization Required
+```
+root, admin, user
 ```
 
 #### Body
@@ -385,6 +426,11 @@ Pagination is seek based and ordered by creation date in descending order.
 #### Path
 ```
 /link/paginate_user
+```
+
+#### Authorization Required
+```
+root, admin, user
 ```
 
 #### Body
@@ -441,6 +487,11 @@ Paginate the links of a user by popularity.
 /link/paginate_popular
 ```
 
+#### Authorization Required
+```
+root, admin, user
+```
+
 #### Body
 
 ```json
@@ -487,6 +538,11 @@ Paginate and count the stats for the campaign links server side.
 #### Path
 ```
 /link/paginate_campaign_stats
+```
+
+#### Authorization Required
+```
+root, admin, user
 ```
 
 #### Body
@@ -538,6 +594,11 @@ Find links in a batch of maximum 25.  Similar to *Find* except that it is done i
 /link/find_batch
 ```
 
+#### Authorization Required
+```
+root, admin, user
+```
+
 #### Body
 
 ```json
@@ -587,6 +648,11 @@ Find link history in batches of maximum 25.
 /link/find_batch_history
 ```
 
+#### Authorization Required
+```
+root, admin, user
+```
+
 #### Body
 
 ```json
@@ -631,6 +697,11 @@ Finds the history for all the links of a user.
 #### Path
 ```
 /link/find_history_user
+```
+
+#### Authorization Required
+```
+root, admin, user
 ```
 
 #### Body
@@ -684,6 +755,11 @@ only do so if absolutely necessary.
 #### Path
 ```
 /link/delete
+```
+
+#### Authorization Required
+```
+root, admin, user
 ```
 
 #### Body
