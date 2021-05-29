@@ -1,6 +1,6 @@
-# Links
+# Campaign
 
-All link requests (`/link/*`) need to specify the Auth headers below as described in [General](./#authentication)
+All campaign requests (`/campaign/*`) need to specify the Auth headers below as described in [General](./#authentication)
 
 #### HEADERS
 ```json
@@ -12,8 +12,6 @@ All link requests (`/link/*`) need to specify the Auth headers below as describe
 #### ALL REQUESTS
 
 [[toc]]
-
-
 
 
 ## Get suggested name 
@@ -335,6 +333,8 @@ do not specify it if not required.
 
 Find the tags of an existing link.
 
+The response is not the same as the plain tag string value used previously. They are enriched with extra information.
+
 #### REQUEST
 
 #### Path
@@ -361,7 +361,14 @@ Find the tags of an existing link.
 {
   "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
   "data": {
-    "Items": [ "Tag1" ]
+    "Items": [
+      {
+        "tag_id": "#tag#clt#6be8d279-591a-4210-922e-d6caa605b063#Tag1",
+        "link_id": "#lnk#/anything",
+        "tag_name": "Tag1"
+      },
+      ...
+    ]
   }
 }
 ```
@@ -426,7 +433,7 @@ Paginate the links of a user by popularity.
 - `PageKey` Used to continue the pagination. If the first page call returned a `PageKey` in the response it indicates that
   there are more items. Specifying it in the next request continues getting the data from that previous point.
   Leave empty string, null or omit the PageKey on the request to not use it.
-- `period` Can be one of three values:
+- `Period` Can be one of three values:
   - `alltime` Orders by most popular over all links 
   - `monthly` Orders by most popular for the month (UTC)
   - `daily` Orders by most popular for the current day (UTC)
@@ -448,9 +455,9 @@ Paginate the links of a user by popularity.
     "control": { },
     "data": {
       "username": "SuperAdmin1",
-      "period": "daily",
       "Limit": 10,
       "PageKey": null,
+      "Period": "daily",
       "Sort": "DESC"
     }
 }
@@ -544,6 +551,7 @@ Find links in a batch of maximum 25.  Similar to *Find* except that it is done i
 {
     "control": { },
     "data": {
+      "client_id": "#clt#6be8d279-591a-4210-922e-d6caa605b063",
       "link_ids": ["#lnk#/anything"]
     }
 }
@@ -593,6 +601,7 @@ Find link history in batches of maximum 25.
 {
     "control": { },
     "data": {
+      "client_id": "#clt#6be8d279-591a-4210-922e-d6caa605b063",
       "link_ids": ["#lnk#/anything"],
       "period": "daily",
       "period_value": "2021-06"
