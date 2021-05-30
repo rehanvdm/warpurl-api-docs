@@ -1,5 +1,9 @@
 # Links
 
+A Link is a record that contains the short URL, long URL and other related data.
+
+Consult the <[model:link](model.html#link)> for general property/field information.
+
 All link requests (`/link/*`) need to specify the Auth headers below as described in [General](./#authentication)
 
 #### HEADERS
@@ -12,9 +16,6 @@ All link requests (`/link/*`) need to specify the Auth headers below as describe
 #### ALL REQUESTS
 
 [[toc]]
-
-
-
 
 ## Get suggested name 
 

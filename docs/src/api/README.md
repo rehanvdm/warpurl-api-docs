@@ -31,10 +31,11 @@ The following `control` properties can be specified on specific requests and wil
 
 #### HTTP Status Codes
 
-**This structure is returned as the response of ALL API Calls. Only the Success API Call responses will be shown from
-here on out, except if the specific error ResponseCode is of significant value.**
+This structure is returned as the response of ALL API Calls. Only the Success API Call responses will be shown from
+here on out, except if the specific error ResponseCode is of significant value.
 
 #### 200 - SUCCESS
+Indicates that the API endpoint was hit successfully, all auth passed.
 ```json
 {
   "control": { 
@@ -46,7 +47,6 @@ here on out, except if the specific error ResponseCode is of significant value.*
 }
 ```
 
-Indicates that the API endpoint was hit successfully, all auth passed.
 - `control` Is a structure that will always be returned if the API was hit. It is the high level structure that can be used
   for branching logic.
 - `control.ResponseCode` Indicates if the request executed successfully or not.
@@ -93,7 +93,7 @@ Exceeding the set rate limit per second value
 
 ## Authentication
 
-They are secured by 2 mechanism.
+API calls are secured by 2 mechanism.
 
 ### API Keys
 Each **Subscription** has its own API Key. This key is used to identify all requests for that Subscription.
@@ -108,12 +108,12 @@ Each request requires the API Key value in the header:
 
 ### Access Keys
 Access keys identify a **specific user**. They can be created in the Subscription Portal under a specific user Profile.
-These can be rotated, each user can have two API keys(active or inactive) at a time.  If you lose or forget your secret key,
-you cannot retrieve it. Instead, create a new access key and make the old key inactive.
+These can be rotated, each user can have two Access Keys(active or inactive) at a time. The key password can not be retrieved 
+after creation. Instead, create a new Access Key and make the old key inactive.
 
 The Access Keys consists of a **Key ID** and a **Key Password** these must be exchanged for temporary JWT ID & Refresh Tokens by calling
-*[Access Keys - Get Token](#access-keys---get-token)*. These are AWS Cognito Tokens but behave exactly the same as any other JWT Tokens,
-thus they expire after a given time. The JWT ID Token can be refreshed by calling the *[Access Keys - Refresh Token](#access-keys---refresh-token)*.
+*[Get Token](access_key.html#get-token)*. These are AWS Cognito Tokens but behave exactly the same as any other JWT Tokens,
+thus they expire after a given time. The JWT ID Token can be refreshed by calling *[Refresh Token](access_key.html#refresh-token)*.
 
 Each request requires the JWT ID Token in the header:
 ```json

@@ -1,6 +1,10 @@
 # Imports
 
-All imports requests (`/db_import/*`) need to specify the Auth headers below as described in [General](./#authentication)
+Data can be imported in bulk using CSV files.
+
+Consult the <[model:import](model.html#import)> for general property/field information.
+
+All imports requests (`/db_import/*`) need to specify the Auth headers below as described in [General](./#authentication).
 
 #### HEADERS
 ```json
@@ -16,12 +20,14 @@ All imports requests (`/db_import/*`) need to specify the Auth headers below as 
 
 ## Create
 
-Create an Import job.
+Creating an Import job **consists of two parts**. The **first** is **creating the Import Job record** using this API call that 
+returns an S3 `SignedPutUrl` (expires after 15 minutes). The **second** part involves doing a `PUT` request to the `SignedPutUrl` uploading **the contents of 
+the file**. Only then will the file be processed and the job start, given the queue is empty.
 
 #### REQUEST
 #### Path
 ```
-/campaign/create
+/db_import/create
 ```
 
 #### Authorization Required
@@ -44,6 +50,7 @@ root, admin, user
     }
 }
 ```
+
 See the [model](model.html#import) for a full field description/rules.
 
 - `client_id`, `username`, `import_type`, `import_format`, `file_name` Required.
@@ -66,106 +73,22 @@ See the [model](model.html#import) for a full field description/rules.
 }
 ```
 
+On success, do a `PUT` request to the S3 `SignedPutUrl` with the contents of the file. The S3 signed URL expires after 15 minutes.
+
 > *[Back to all Requests](#import)*
----------------
-
-
-
-
-
-
-
-Continue explaining the SignedPutUrl
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Update
-
-Updates, **replaces properties** of a campaign.
-
-All the same fields and logic applied to the creation of the campaign applies for the update.
-
-All the **optional properties** when creating a campaign **can be removed by not specifying that property or making them null**.
-
-#### REQUEST
-
-#### Path
-```
-/campaign/update
-```
-
-#### Authorization Required
-```
-root, admin, user
-```
-
-#### Body
-
-```json
-{
-    "control": { },
-    "data": {
-      "campaign_id": "#cmp#2021-05-16 10:05:56.958#db6f265f-ac89-4004-8c69-bb7f9e8203ed",
-      "username": "SuperAdmin1",
-      "name": "News letter 2021-05",
-      "description": "May 2020 news letter",
-      "channels": ["Sms", "Email"]
-    }
-}
-```
-
-#### RESPONSE
-
-#### Success
-```json
-{
-  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
-  "data": <model:db_import>
-}
-```
-
-> *[Back to all Requests](#imports)*
 ---------------
 
 
 ## Find
 
-Find an existing campaign.
+Find an Import Job and links to the original and processed files. The processed file will include individual row level
+errors (if any) in the last column of each row.
 
 #### REQUEST
 
 #### Path
 ```
-/campaign/find
+/db_import/find
 ```
 
 #### Authorization Required
@@ -179,8 +102,7 @@ root, admin, user
 {
     "control": { },
     "data": {
-      "campaign_id": "#cmp#2021-05-16 10:05:56.958#db6f265f-ac89-4004-8c69-bb7f9e8203ed",
-      "username": "SuperAdmin1"
+      "import_id": "#imp#87b3ba4e-a58d-4b27-b292-5867df9c24d6"
     }
 }
 ```
@@ -191,16 +113,37 @@ root, admin, user
 ```json
 {
   "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
-  "data": <model:db_import>
+  "data": {
+    ...<model:db_import>,
+    "SignedFileGetUrlRaw": "",
+    "SignedFileGetUrlProcessed": ""
+  }
 }
 ```
+
+Returns all the `<model:db_import>` fields/properties and two additional properties. 
+Both `SignedFileGetUrlRaw` and `SignedFileGetUrlProcessed` are S3 signed URLs and expire in 15 minutes from being received.  
+
+- `SignedFileGetUrlRaw` Signed S3 GET URL to get the original file.
+- `SignedFileGetUrlProcessed` Signed S3 GET URL to get the processed file.
 
 > *[Back to all Requests](#imports)*
 ---------------
 
+
+
+
+
+
+
+
+
+
+
+
 ## Paginate
 
-Paginate the campaigns of a user.
+Paginate the Import Jobs of a user.
 
 Pagination is seek based and ordered by creation date in descending order.
 
@@ -208,7 +151,7 @@ Pagination is seek based and ordered by creation date in descending order.
 
 #### Path
 ```
-/campaign/paginate_user
+/db_import/paginate_user
 ```
 
 #### Authorization Required
@@ -247,107 +190,9 @@ root, admin, user
 }
 ```
 
-- `PageKey` Will only have a value IF there are more items to be retrieved, otherwise null.
-
-> *[Back to all Requests](#imports)*
----------------
-
-## Search
-
-Search all campaigns by name, case-sensitive.
-
-#### REQUEST
-
-#### Path
-```
-/campaign/search
-```
-
-#### Authorization Required
-```
-root, admin, user
-```
-
-#### Body
-
-```json
-{
-    "control": { },
-    "data": {
-      "username": "SuperAdmin1",
-      "text": "News letter",
-      "Limit": 10,
-      "PageKey": null,
-      "Sort": "DESC"
-    }
-}
-```
-
-- `Limit` Maximum amount of rows to return, must be less than 100, *might return less than the specified value.
-- `PageKey` Used to continue the pagination. If the first page call returned a `PageKey` in the response it indicates that
-  there are more items. Specifying it in the next request continues getting the data from that previous point.
-  Leave empty string, null or omit the PageKey on the request to not use it.
-- `text` The value that is searched for in the campaign name, case-sensitive.
-
-#### RESPONSE
-
-#### Success
-```json
-{
-  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
-  "data": {
-    "Items": [<model:db_import>],
-    "PageKey": null
-  }
-}
-```
+Use the Find API call to get the original and processed files download urls.
 
 - `PageKey` Will only have a value IF there are more items to be retrieved, otherwise null.
-
-> *[Back to all Requests](#imports)*
----------------
-
-## Delete
-
-Delete an existing campaign.
-
-#### REQUEST
-
-#### Path
-```
-/campaign/delete
-```
-
-#### Authorization Required
-```
-root, admin, user
-```
-
-#### Body
-
-```json
-{
-    "control": { },
-    "data": {
-      "campaign_id": "#cmp#2021-05-16 10:05:56.958#db6f265f-ac89-4004-8c69-bb7f9e8203ed",
-      "username": "SuperAdmin1"
-    }
-}
-```
-
-#### RESPONSE
-
-#### Success
-```json
-{
-  "control": { "ResponseCode": 2000, "TraceID": "11648023-1376-4da8-806e-11999c1c519f", "Build": "eb511f1" },
-  "data": {
-    "campaign_id": "#cmp#2021-05-16 10:05:56.958#db6f265f-ac89-4004-8c69-bb7f9e8203ed",
-    "username": "SuperAdmin1"
-  }
-}
-```
-Returns body as was sent on success.
 
 > *[Back to all Requests](#imports)*
 ---------------

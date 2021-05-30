@@ -1,5 +1,9 @@
 # Campaigns
 
+A Campaign is just a grouping of links whereby a link can only have one campaign.
+
+Consult the <[model:campaign](model.html#campaign)> for general property/field information.
+
 All campaign requests (`/campaign/*`) need to specify the Auth headers below as described in [General](./#authentication)
 
 #### HEADERS

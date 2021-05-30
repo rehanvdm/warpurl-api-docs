@@ -22,16 +22,8 @@ module.exports = {
         link: '/api/',
       },
       {
-        text: 'Guide 2',
-        link: '/guide/',
-      },
-      {
-        text: 'Config',
-        link: '/config/'
-      },
-      {
-        text: 'VuePress',
-        link: 'https://v1.vuepress.vuejs.org'
+        text: 'WarpURL',
+        link: 'https://warpurl.com'
       }
     ],
     sidebar: {
@@ -51,7 +43,10 @@ module.exports = {
               children: [
                   'link',
                   'campaign',
-                  'db_import'
+                  'db_import',
+                  'access_key',
+                  'user',
+                  'client'
               ]
             },
           ]
