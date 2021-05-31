@@ -1,6 +1,5 @@
 let title = 'WarpURL API Documentation';
 let description = title;
-// const image = path.resolve(__dirname + '/static/logo_back_white.svg');
 let image = 'https://warpurl.com/cdn/logos/logo_back_white.png';
 
 let ogTagsFromWarpUrlWeb = [
@@ -21,6 +20,7 @@ let ogTagsTransformed = ogTagsFromWarpUrlWeb.map(row => {
 })
 
 module.exports = {
+  // base: "/warpurl-api-docs/", /* Required for Github Pages, same as repo name.. Unless custom domain that just has base / */
   title: title,
   description: description,
   head: [

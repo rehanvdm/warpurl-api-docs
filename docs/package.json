@@ -11,10 +11,12 @@
   "scripts": {
     "dev-reload-for-config-changes": "vuepress dev src --temp src/.temp",
     "dev": "vuepress dev src",
-    "build": "vuepress build src"
+    "build": "vuepress build src",
+    "deploy": "npm run build && echo api-docs.warpurl.com > src/.vuepress/dist/CNAME && gh-pages -d src/.vuepress/dist"
   },
   "license": "MIT",
   "devDependencies": {
-    "vuepress": "^1.5.3"
+    "vuepress": "^1.5.3",
+    "gh-pages": "^3.2.0"
   }
 }
