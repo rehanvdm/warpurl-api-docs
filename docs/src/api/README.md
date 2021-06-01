@@ -93,12 +93,12 @@ Exceeding the set rate limit per second value
 
 ## Authentication
 
-API calls are secured by 2 mechanism.
+API calls are secured by two mechanisms.
 
 ### API Keys
 Each **Subscription** has its own API Key. This key is used to identify all requests for that Subscription.
 It can be obtained in the WarpURL portal under Subscriptions by clicking on a specific Subscription.
-Note that it can not be rotated, it is only used to separate and rate limit API traffic per Subscription.
+Note that it can not be rotated, as it is only used to separate and rate limit API traffic per Subscription.
 
 Each request requires the API Key value in the header:
 ```json
@@ -109,9 +109,9 @@ Each request requires the API Key value in the header:
 ### Access Keys
 Access keys identify a **specific user**. They can be created in the Subscription Portal under a specific user Profile.
 These can be rotated, each user can have two Access Keys(active or inactive) at a time. The key password can not be retrieved 
-after creation. Instead, create a new Access Key and make the old key inactive.
+after creation. Instead, create a new Access Key and make the old Key inactive.
 
-The Access Keys consists of a **Key ID** and a **Key Password** these must be exchanged for temporary JWT ID & Refresh Tokens by calling
+The Access Keys consists of a **Key ID** and a **Key Password** ,these must be exchanged for temporary JWT ID & Refresh Tokens by calling
 *[Get Token](access_key.html#get-token)*. These are AWS Cognito Tokens but behave exactly the same as any other JWT Tokens,
 thus they expire after a given time. The JWT ID Token can be refreshed by calling *[Refresh Token](access_key.html#refresh-token)*.
 

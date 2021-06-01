@@ -61,7 +61,7 @@ root, admin, user
 
 Returns all the properties/fields of <model:access_key> and then an extra property `key_password`.
 
-- `key_password` Will only be returned once after creating the key.
+- `key_password` Will only be returned after creating the key.
 
 > *[Back to all Requests](#access-keys)*
 ---------------

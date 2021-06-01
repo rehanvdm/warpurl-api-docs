@@ -4,7 +4,7 @@ Data can be imported in bulk using CSV files.
 
 Consult the <[model:import](model.html#import)> for general property/field information.
 
-All imports requests (`/db_import/*`) need to specify the Auth headers below as described in [General](./#authentication).
+All import requests (`/db_import/*`) need to specify the Auth headers below as described in [General](./#authentication).
 
 #### HEADERS
 ```json
@@ -22,7 +22,7 @@ All imports requests (`/db_import/*`) need to specify the Auth headers below as 
 
 Creating an Import job **consists of two parts**. The **first** is **creating the Import Job record** using this API call that 
 returns an S3 `SignedPutUrl` (expires after 15 minutes). The **second** part involves doing a `PUT` request to the `SignedPutUrl` uploading **the contents of 
-the file**. Only then will the file be processed and the job start, given the queue is empty.
+the file**. Only then will the file be processed and the job start,  if the queue is empty.
 
 #### REQUEST
 #### Path
@@ -81,7 +81,7 @@ On success, do a `PUT` request to the S3 `SignedPutUrl` with the contents of the
 
 ## Find
 
-Find an Import Job and links to the original and processed files. The processed file will include individual row level
+Finds an Import Job and links to the original and processed files. The processed file will include individual row level
 errors (if any) in the last column of each row.
 
 #### REQUEST

@@ -174,7 +174,7 @@ root, admin, user
 Updates, **replaces**, the tags of an existing link.
 
 - Maximum 5 tags per link.
-- Tags can not be longer than 20 charters.
+- Tags can not be longer than 20 characters.
 - To remove all tags; leave array empty, omit property or set to null.
 
 #### REQUEST
@@ -579,7 +579,7 @@ root, admin, user
 
 - `PageKey` Will only have a value IF there are more links that needs to be counted server side, otherwise it will be null.
 - `Stat` This object contains statistic fields similar to `<model:link>`. With the extra property
-  of `links` indicating the number of links that has been used for the calculation. 
+  of `links` indicating the number of links that have been used for the calculation. 
 
 > *[Back to all Requests](#links)*
 ---------------
@@ -743,7 +743,7 @@ Same format as <model:link_history_daily>.
 
 Delete links in batches of maximum 10.
 
-- `invalidate` Whether to also clear them out of the edge caches **immediately**. Can be either true or false. 
+- `invalidate` Specify to clear links out of the edge caches **immediately**. Can be either true or false. 
   If false is specified then the link will be removed and inaccessible within a day.
 
 ::: danger

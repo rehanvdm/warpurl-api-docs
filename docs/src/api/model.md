@@ -2,7 +2,7 @@
 
 [[toc]]
 
-These are the models that can be returned API calls. They are presented in example format and will be referenced by
+These are the models that can be returned by API calls. They are presented in example format and will be referenced by
 name ex: `<model:link>`. All fields will be indicated, but those not defined will not be returned or returned as the 
 default for that type.
 
@@ -10,7 +10,7 @@ General information of the field will be indicated if of significant value.
 
 - The **Date Format** is not strictly ISO1806, the `T` is replaced with a space, no time zone indication as this it is always UTC and the 
   milliseconds are included. Example: `2021-05-19 19:33:03.324`
-- The `client_id` can be acquired by inspecting the JWT claims of the user or doing the Find User api call of that user. *Reserved fo future use*
+- The `client_id` can be acquired by inspecting the JWT claims of the user or doing the Find User api call of that user. *Reserved for future use*
 - The `user_id` can be converted to the `username` field by adding the prefix of `#usr#` some API calls recquire the `username`
   and others the `user_id`.
 - When referring to the value `null` it means the JSON value `null`, not string value. 
@@ -44,9 +44,9 @@ A record that contains the short URL, long URL and other related data.
   Can not contain `?` or `#`. Max length 255 characters.
 - `name` Max length 100 characters.
 - `long_url` Must start with "http://" or "https://". Max length 1024 charters.
-- `enable` *Reserved fo future use*.
+- `enable` *Reserved for future use*.
 - `hidden` Hidden links do not show on the Subscription Portal
-- `client_id` This value can be acquired by inspecting the JWT claims of the user or doing the Find User api call. *Reserved fo future use*.
+- `client_id` This value can be acquired by inspecting the JWT claims of the user or doing the Find User api call. *Reserved for future use*.
 - `clicks` Total clicks for the lifespan of the link.
 - `clicks_unique` Total unique clicks for the lifespan of the link. 
     Uniqueness counted by the querystring attached to the short url when navigated by user. 
@@ -210,7 +210,7 @@ Soft limits:
 - `import_status_description` Text description of import status and percentage.
 - `line_validation_ignore_error` Reserved for future use. 
 - `file_name` The name of the file that was used.
-- `file_sie` The size of the file in bytes.
+- `file_size` The size of the file in bytes.
 - `notes` Optional, Any additional notes for this import. Maximum length 1024 characters.
 - `total_rows` Count of rows detected.
 - `total_error` Count of rows that could not be imported. Errors can be viewed by downloading the processed file.
