@@ -66,7 +66,7 @@ module.exports = {
               title: 'Requests',
               // prefix: '/requests/', //not really working
               path: '/api/link', //no path makes it a group, gray heading //Make path same as the first element to "skip" the README
-              collapsable: false,
+              collapsable: true,
               // sidebarDepth: 1,
               children: [
                   'link',
