@@ -1,18 +1,18 @@
 {
-  "name": "warpurlapi-docs",
+  "name": "warpurl-docs",
   "version": "0.0.1",
-  "description": "WarpURL API Documentation",
+  "description": "WarpURL Documentation",
   "main": "index.js",
   "authors": {
     "name": "Rehan",
     "email": "rehan.vdm4@gmail.com"
   },
-  "repository": "/WarpURL API Docs",
+  "repository": "WarpURL Docs",
   "scripts": {
     "dev-reload-for-config-changes": "vuepress dev src --temp src/.temp",
     "dev": "vuepress dev src",
     "build": "vuepress build src",
-    "deploy": "npm run build && echo api-docs.warpurl.com > src/.vuepress/dist/CNAME && gh-pages -d src/.vuepress/dist"
+    "deploy": "npm run build && echo docs.warpurl.com > src/.vuepress/dist/CNAME && gh-pages -d src/.vuepress/dist"
   },
   "license": "MIT",
   "devDependencies": {

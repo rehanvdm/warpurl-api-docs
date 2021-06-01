@@ -1,4 +1,6 @@
-let title = 'WarpURL API Documentation';
+
+let title = 'WarpURL Documentation';
+let siteTitle = 'Documentation';
 let description = title;
 let image = 'https://warpurl.com/cdn/logos/logo_back_white.png';
 
@@ -21,7 +23,7 @@ let ogTagsTransformed = ogTagsFromWarpUrlWeb.map(row => {
 
 module.exports = {
   // base: "/warpurl-api-docs/", /* Required for Github Pages, same as repo name.. Unless custom domain that just has base / */
-  title: title,
+  title: siteTitle,
   description: description,
   head: [
     ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui' }],
@@ -51,7 +53,8 @@ module.exports = {
         link: 'https://warpurl.com'
       }
     ],
-    sidebar: {
+    sidebar:
+      {
       '/api/': [
         {
           title: 'Api',
@@ -60,11 +63,11 @@ module.exports = {
             '',
             'model',
             {
-              title: 'REQUESTS',
+              title: 'Requests',
               // prefix: '/requests/', //not really working
-              // path: '/api/requests/', //no path makes it a group
+              path: '/api/link', //no path makes it a group, gray heading //Make path same as the first element to "skip" the README
               collapsable: false,
-              sidebarDepth: 1,
+              // sidebarDepth: 1,
               children: [
                   'link',
                   'campaign',
@@ -74,19 +77,23 @@ module.exports = {
                   'client'
               ]
             },
+            // {
+            //   title: 'REQUESTS',
+            //   // prefix: '/requests/', //not really working
+            //   // path: '/api/requests/', //no path makes it a group
+            //   collapsable: false,
+            //   sidebarDepth: 1,
+            //   children: [
+            //       'link',
+            //       'campaign',
+            //       'db_import',
+            //       'access_key',
+            //       'user',
+            //       'client'
+            //   ]
+            // },
           ]
-        }
-      ],
-
-      '/guide/': [
-        {
-          title: 'Guide',
-          collapsable: false,
-          children: [
-            '',
-            'using-vue',
-          ]
-        }
+        },
       ],
     }
   },

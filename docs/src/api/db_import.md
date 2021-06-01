@@ -22,7 +22,7 @@ All import requests (`/db_import/*`) need to specify the Auth headers below as d
 
 Creating an Import job **consists of two parts**. The **first** is **creating the Import Job record** using this API call that 
 returns an S3 `SignedPutUrl` (expires after 15 minutes). The **second** part involves doing a `PUT` request to the `SignedPutUrl` uploading **the contents of 
-the file**. Only then will the file be processed and the job start,  if the queue is empty.
+the file**. Only then will the file be processed and the job start, given that the queue is empty.
 
 #### REQUEST
 #### Path

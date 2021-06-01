@@ -744,7 +744,7 @@ Same format as <model:link_history_daily>.
 Delete links in batches of maximum 10.
 
 - `invalidate` Specify to clear links out of the edge caches **immediately**. Can be either true or false. 
-  If false is specified then the link will be removed and inaccessible within a day.
+  If false is specified then the links will be removed and inaccessible within a day.
 
 ::: danger
 Specifying `invalidate` as true uses an invalidation which is a billing metric, 
