@@ -45,16 +45,55 @@ module.exports = {
     sidebarDepth: 2,
     nav: [
       {
+        text: 'Getting Started',
+        link: '/getting-started/',
+      },
+      {
+        text: 'Manage Subscriptions',
+        link: '/managing-subscriptions/',
+      },
+      {
+        text: 'Subscription',
+        link: '/subscription/',
+      },
+      {
         text: 'API',
         link: '/api/',
       },
       {
-        text: 'WarpURL',
+        text: 'Back to WarpURL',
         link: 'https://warpurl.com'
       }
     ],
     sidebar:
       {
+      '/getting-started/': [
+        {
+          title: 'Getting Started',
+          collapsable: false,
+          children: [
+            '',
+          ]
+        },
+      ],
+      '/managing-subscriptions/': [
+          {
+            title: 'Managing Subscriptions',
+            collapsable: false,
+            children: [
+              '',
+            ]
+          },
+       ],
+        '/subscription/': [
+          {
+            title: 'Subscription',
+            collapsable: false,
+            children: [
+              '',
+            ]
+          },
+        ],
       '/api/': [
         {
           title: 'Api',
@@ -69,12 +108,12 @@ module.exports = {
               collapsable: true,
               // sidebarDepth: 1,
               children: [
-                  'link',
-                  'campaign',
-                  'db_import',
-                  'access_key',
-                  'user',
-                  'client'
+                'link',
+                'campaign',
+                'db_import',
+                'access_key',
+                'user',
+                'client'
               ]
             },
             // {
