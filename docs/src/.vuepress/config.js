@@ -50,7 +50,7 @@ module.exports = {
       },
       {
         text: 'Manage Subscriptions',
-        link: '/managing-subscriptions/',
+        link: '/managing-subscriptions/subscription',
       },
       {
         text: 'Subscription',
@@ -81,7 +81,8 @@ module.exports = {
             title: 'Managing Subscriptions',
             collapsable: false,
             children: [
-              '',
+              'subscription',
+              'billing_and_invoicing',
             ]
           },
        ],

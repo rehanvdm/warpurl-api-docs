@@ -1,9 +1,7 @@
-# Subscription
+# Subscriptions
 
 A Subscription is identified by its shortening domain and contains all links, users and other entities for that shortening
 domain.
-
-_Images on this page *might be outdated_
 
 [[toc]]
 
@@ -15,12 +13,13 @@ Request early access [here](https://warpurl.com/) by clicking SIGN UP to receive
 Login to WarpURL after registering at [https://warpurl.com/](https://warpurl.com/). Navigate to the
 [Subscriptions](https://warpurl.com/app/subscriptions) using the left hand side menu.
 
+_Images on this page *might be outdated_
 
 ---
 
 ## New Subscription
 
-Click on NEW SUBSCRIPTION button that can be found on the [Subscriptions](https://warpurl.com/app/subscriptions) page.
+Click on the NEW SUBSCRIPTION button that can be found on the [Subscriptions](https://warpurl.com/app/subscriptions) page.
 
 ::: danger IMPORTANT
 If you are not a technical person, please run the overview below by your team/technical person that will help you.
@@ -36,10 +35,10 @@ These are the general steps involved to create a new subscription:
 
 1. Enter the selected details to create a new Subscription. Choose the correct Pricing Plan OR enter a Promo Code.
 1. Complete the Billing section by setting up the monthly subscription using PayPal. A credit card or PayPal account is needed for this step.
-1. Create 2 DNS records so that we know you own the domains and can issue SSL certificates for the domains.
+1. Create 2 DNS records so that we know you own the domains and can issue SSL certificates for those domains.
 1. Wait for confirmation of the above DNS records. Propagation can take anything from 5 minutes to 24 hours, usually it is just a few minutes.
 1. After confirmation is received, we create the infrastructure for the Subscription. This usually takes about 15 minutes.
-1. Another 2 DNS records need to be created to point the specified domains to the Subscription infrastructure endpoints created above.
+1. Another 2 DNS records need to be created to point the specified domains (Shortening and Admin) to the Subscription infrastructure endpoints created above.
 1. The Subscription is now usable! Create the first Subscription user which is the Super Admin at `https://<your-admin-domain>/auth/register`. 
     Instructions would also have been sent via email. 
    
@@ -54,26 +53,26 @@ Let's look at each step in more detail.
 - `Domain` is the base of the domain, allowing us to only specify the Subdomains below. 
 - `Shortening Subdomain` Leaving this field blank will make the Domain the Shortening Domain as in the example above. 
   Any value can be specified that is DNS complaint.
-- `Admin Subdomain` is the Subdomain that specifies the address of the portal to manage all the links ect. for the Shortening domain. 
+- `Admin Subdomain` is the Subdomain that specifies the address of the portal to manage everything.
     Values like `app` or `admin` is common values.
-- `Fallback URL` is the URL that the user will be navigated to IF a link does not exist. 
-- `Promo Code` can be obtained through email after requesting access. Significant discount, like above, can be applied with certain coeds.
+- `Fallback URL` is the URL that a user clicking a link will be navigated to IF a link does not exist. 
+- `Promo Code` can be obtained through email after requesting early access. Significant discount, like above, can be applied with certain coeds.
     In the example above, the Subscription is free for up to 100k links and thus the next step of capturing the billing details 
     is not required. 
 
 ---
 ![Payment Page](./images/new/2_payment.png)
 
-At this step we capture your payment method for the monthly subscription and the one time only setup fee. Two methods are
+At this step we capture your payment method for the monthly subscription and the one time only setup fee. Two payment methods are
 available:
 
 - Debit or Credit card
 - Directly through PayPal
 
-Both methods are processed and secured by PayPal, we don't store any credit card information. Choosing one will make a PayPal popup window appear
+Both methods are processed and **secured by PayPal**, we don't store any credit card information. Choosing either will make a PayPal popup window appear
 so that you can create the Debit Order and pay the immediate one time only setup fee. 
 
-When done the window will be closed and PayPal will send you an email for confirmation of the purchase. WarpURL is a 
+When done, the window will be closed and PayPal will send you an email for confirmation of the purchase. WarpURL is a 
 brand company of **Systanics** or __PAYPAL *SYSTANICS__, do not be alarmed if you see this on the invoice.
 
 You can also expect an invoice from us shortly there after for the setup fee.
@@ -85,7 +84,7 @@ continue to the next step.
 ---
 ![DNS Records](./images/new/3_waiting_cert_validation.png)
 
-Next you need to create 2 CNAME DNS records so that we know you own the domains and can issue SSL certificates for the domains.
+Next you need to create 2 CNAME DNS records so that we know you own the domain(s) and that we can issue SSL certificates for those domains.
 
 ::: warning IMPORTANT
 The values in the image above is just an example, your values will be different. 
@@ -93,19 +92,19 @@ The values in the image above is just an example, your values will be different.
 
 The verification process can take between 5 minutes to 24 hours for the DNS records to propagate after the CNAME records have been added.
 
-You can hit the Refresh button in the top right to check verify that the records exist. As soon as they do, we start creating
+You can hit the REFRESH button in the top right corner to check if the records have propagated and exist. As soon as they do, we start creating
 the infrastructure.
 
 ---
 ![Subscription being Created](./images/new/3_1_creating_sub.png)
 
-It takes about 15 minutes to create the infrastructure for your Subscription, hit the REFRESH button in the top right
+It takes about 15 minutes to create the infrastructure for your Subscription, again hit the REFRESH button in the top right corner 
 to move to the next step. 
 
 ---
 ![DNS Records](./images/new/4_cloudfront_dns.png)
 
-The infrastructure is now complete. All that is left is to point the Shorting domain and Admin domain to the newly 
+The infrastructure has now been created. All that is left is to point the Shorting domain and Admin domain to the newly 
 provisioned infrastructure. This is done by creating the last 2 DNS CNAME records. 
 
 ::: warning IMPORTANT
@@ -181,8 +180,10 @@ Updating usually takes around 15 minutes.
 ## Delete Subscription
 
 Navigate to the [Subscriptions](https://warpurl.com/app/subscriptions) page.
+
 A Subscription can be deleted by clicking on the trashcan button on the right hand side of that Subscription row within the data grid.
 This will present a popup that if accepted will change the Subscription to a status of DELETE_REQUESTED. 
+
 It can take upto 72 hours for the Subscription to be removed, you will not be charged the period between DELETE_REQUESTED 
 and the actual deletion of the data. We might contact you via email during this period. 
 
