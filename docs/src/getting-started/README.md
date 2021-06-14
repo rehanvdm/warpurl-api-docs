@@ -14,7 +14,7 @@ where you create and **manage one or more Subscriptions**. A Subscription is ide
 all links, users and other entities for that shortening domain. 
 
 Each **Subscription** has two important URLs/domains; the **shortening domain** and the **app/admin domain**. In the case of our demo,
-the shortening domain is `demo.warpurl.net`, this is the base of all the short URLs/links, example: `demo.warpurl.net/test-ping`.
+the shortening domain is `demo.warpurl.net`, this is the base for all of the short URLs/links, example: `demo.warpurl.net/test-ping`.
 The app/admin domain is `app.demo.warpurl.net`, this is where we create the above short link, tags, campaigns, imports,
 manage users ect. 
 
@@ -44,7 +44,7 @@ See the sections below for more information:
 ## Subscription
 
 A Subscription can have **multiple users** (Super Admin/Admin/User) with varying permissions. 
-Each user only has access to their own data, like: Links, Dashboard, Campaigns, Imports, Access Keys ect. 
+Each user only has access to their own data such as Links, Dashboard, Campaigns, Imports, Access Keys ect. 
 Users can be **assumed/impersonated** to "share" their data between each other if needed. 
 
 A Link can have **multiple Tags** but only a **single Campaign** and Campaign Channel. 
