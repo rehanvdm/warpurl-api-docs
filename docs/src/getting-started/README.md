@@ -58,12 +58,12 @@ When available we also record the following; locations (the closest major countr
 
 See the sections below for more information:
 
-- [Users](../subscription/subscription.html#users)
-- [Links](../subscription/subscription.html#links)
-- [Link History](../subscription/subscription.html#link-history)
-- [Imports](../subscription/subscription.html#imports)
-- [Campaigns](../subscription/subscription.html#campaigns)
-- [Tags](../subscription/subscription.html#tags)
+- [Users](../subscription/#users)
+- [Links](../subscription/#links)
+- [Link History](../subscription/#link-history)
+- [Imports](../subscription/#imports)
+- [Campaigns](../subscription/#campaigns)
+- [Tags](../subscription/#tags)
  
 
 ## API
